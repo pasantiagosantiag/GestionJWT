@@ -14,6 +14,7 @@ import io.ktor.serialization.JsonConvertException
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.application.log
+import io.ktor.server.plugins.requestvalidation.RequestValidationException
 
 
 import io.ktor.server.plugins.statuspages.StatusPages
@@ -31,6 +32,15 @@ fun Application.configureStatusPages() {
          * EXCEPCIONES CAPA DE PRESENTACIÓN/ENDPOINTS
          */
         // Captura específicamente errores de campos faltantes
+        exception<RequestValidationException> { call, cause ->
+            call.respond(
+                HttpStatusCode.BadRequest,
+                mapOf(
+                    "error" to "Datos de entrada inválidos",
+                    "motivos" to cause.reasons // Lista de mensajes de error definidos arriba
+                )
+            )
+        }
         exception<MissingFieldException> { call, cause ->
             val missingFields = cause.missingFields.joinToString(", ")
             call.respond(
@@ -72,6 +82,13 @@ fun Application.configureStatusPages() {
                         ValidationErrorDetail(campoError, mensajeAmigable)
                     )
                 )
+            )
+        }
+        exception<RequestValidationException> { call, cause ->
+            // Devolvemos un 400 Bad Request con los motivos del fallo
+            call.respond(
+                HttpStatusCode.BadRequest,
+                mapOf("errors" to cause.reasons)
             )
         }
         // Captura errores de formato (ej: enviar un número donde va un string)

@@ -17,9 +17,9 @@ import kotlin.getValue
 fun Route.registerEndPoint() {
     val registerUseCase by inject<RegisterUserUseCase>()
     route("register") {
-        install(ValidateSchema) {
+        /*install(ValidateSchema) {
             schemaPath = "json_schemas/register-user-command.schema.json"
-        }
+        }*/
         post() {
 
             val command = call.receive<RegisterUserCommand>()

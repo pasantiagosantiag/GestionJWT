@@ -16,9 +16,9 @@ fun Route.loginEndPoint() {
     val loginUserUseCase by inject<LoginUserUseCase>()
     route("login") {
 
-        install(ValidateSchema) {
+       /* install(ValidateSchema) {
             schemaPath = "json_schemas/login-user-command.schema.json"
-        }
+        }*/
         post() {
 
             val command = call.receive<LoginUserCommand>()

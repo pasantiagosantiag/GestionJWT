@@ -17,9 +17,9 @@ fun Route.refreshEndPoint() {
     val refreshUserUseCase by inject<RefreshTokenUseCase>()
     route("refresh") {
         //se valida el comando que llega con json schema, plugin creado pa ktor
-        install(ValidateSchema) {
+        /*install(ValidateSchema) {
             schemaPath = "json_schemas/refresh-token-command.schema.json"
-        }
+        }*/
         post() {
             val command = call.receive<RefreshTokenUserCommand>()
             var item = refreshUserUseCase(command)

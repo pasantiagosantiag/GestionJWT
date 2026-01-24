@@ -31,10 +31,12 @@ dependencies {
     implementation(libs.ktor.server.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.server.statuspage)
+
     implementation(libs.ktor.server.resources)
     implementation(libs.ktor.server.double.receive)
     implementation(libs.ktor.server.auth)
     implementation(libs.ktor.server.auth.jwt)
+    implementation(libs.ktor.server.validator)
     //jpa con hibernate
     implementation("org.hibernate.orm:hibernate-core:6.4.4.Final")
     implementation("org.hibernate.orm:hibernate-hikaricp:6.4.4.Final")

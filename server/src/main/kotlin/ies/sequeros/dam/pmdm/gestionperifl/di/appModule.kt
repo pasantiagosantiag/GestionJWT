@@ -1,6 +1,5 @@
 package ies.sequeros.dam.pmdm.gestionperifl.di
 
-import ies.sequeros.dam.pmdm.gestionperifl.application.services.ITokenService
 import ies.sequeros.dam.pmdm.gestionperifl.application.user.changepassword.ChangePasswordUseCase
 import ies.sequeros.dam.pmdm.gestionperifl.application.user.delete.DeleteUseCase
 import ies.sequeros.dam.pmdm.gestionperifl.application.user.getmeprofile.GetMyProfileUseCase
@@ -16,7 +15,6 @@ import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.exceptions.DatabaseOp
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.repositories.FilesRepository
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.repositories.UserJPARepository
 import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.services.BCryptEncoderAdapter
-import ies.sequeros.dam.pmdm.gestionperifl.infraestructure.services.TokenService
 import jakarta.persistence.EntityManagerFactory
 import jakarta.persistence.Persistence
 import org.koin.dsl.module
@@ -29,40 +27,31 @@ val appModulo = module {
         } catch (e: Exception) {
             println("ERROR FATAL PERSISTENCIA: ${e.message}")
             throw DatabaseOperationException("Koin", "Error de conexión: DB inaccesible", e)
-
         }
     }.onClose {
         //se cierra la factoria
         it?.close()
     }
-
-
     // Repositorios
     single<IUserRepository> {
         try {
             UserJPARepository(get())
-
         } catch (e: Exception) {
             println("ERROR FATAL PERSISTENCIA: ${e.message}")
             throw e
         }
     }
-
     //repositorio ficheros
     single<IFilesRepository> { FilesRepository() }
 
- //codificador
+    //codificador
     single<IPasswordEncoder> { BCryptEncoderAdapter() }
-
-    factory { RegisterUserUseCase(get(),get()) }
+    factory { RegisterUserUseCase(get(), get()) }
     factory { ChangePasswordUseCase(get(), get()) }
-    factory { DeleteUseCase(get(), get(),get())}
+    factory { DeleteUseCase(get(), get(), get()) }
     factory { GetMyProfileUseCase(get(), get()) }
-    factory { LoginUserUseCase(get(), get(),get()) }
+    factory { LoginUserUseCase(get(), get(), get()) }
     factory { RefreshTokenUseCase(get(), get()) }
     factory { UpdateUserCasoDeUso(get()) }
-    factory { UpdateImageUserCasoDeUso(get(),get()) }
-
-
-
+    factory { UpdateImageUserCasoDeUso(get(), get()) }
 }
